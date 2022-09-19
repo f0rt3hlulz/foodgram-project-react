@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           port: ${{ secrets.PORT }}
-          source: "infra/nginx/default.conf"
+          source: "infra/nginx.conf"
           target: "/home/ftl/foodgram-project-react/nginx"
           strip_components: 2
           
@@ -111,7 +111,8 @@ jobs:
             sudo docker-compose exec -T web python manage.py makemigrations --noinput
             sudo docker-compose exec -T web python manage.py migrate --noinput
             sudo docker-compose exec -T web python manage.py collectstatic --no-input
-            sudo docker-compose exec backend python manage.py load_ingredients
+            sudo docker-compose exec -T web python manage.py load_ingredients
+
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
