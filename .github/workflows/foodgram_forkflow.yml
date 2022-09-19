@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           port: ${{ secrets.PORT }}
-          source: "infra/nginx.conf"
+          source: "infra/nginx/default.conf"
           target: "/home/ftl/foodgram-project-react/nginx"
           strip_components: 2
           
