@@ -1,15 +1,19 @@
-on: '3.3'
+version: '3.3'
 
 services:
   db:
     image: postgres:13.0-alpine
     volumes:
       - /var/lib/postgresql/data/
-    container_name: 'db'
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "50m"
     env_file:
       - ./.env
 
-  backend:
+  web:
     image: f0rt3hlulz/foodgram:latest
     restart: always
     volumes:
@@ -42,7 +46,7 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
-      - backend
+      - web
     container_name: 'nginx'
 
   certbot:
