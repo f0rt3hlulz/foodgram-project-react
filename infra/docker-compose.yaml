@@ -1,8 +1,4 @@
-on: '3.8'
-
-volumes:
-  static_value:
-  media_value:
+on: '3.3'
 
 services:
   db:
@@ -24,6 +20,7 @@ services:
     container_name: 'backend'
     env_file:
       - ./.env
+  
   frontend:
     image: f0rt3hlulz/foodgram_frontend:latest
     volumes:
@@ -32,7 +29,6 @@ services:
 
   nginx:
     image: nginx:1.19.3
-
     ports:
       - "80:80"
       - "443:443"
@@ -57,3 +53,7 @@ services:
     depends_on:
       - nginx
     container_name: 'certbot'
+
+volumes:
+  static_value:
+  media_value:
