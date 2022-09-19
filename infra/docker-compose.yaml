@@ -18,6 +18,7 @@ services:
     image: f0rt3hlulz/foodgram:latest
     restart: always
     volumes:
+      - redoc:/app/api/docs/
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
@@ -50,3 +51,4 @@ services:
 volumes:
   static_value:
   media_value:
+  redoc:

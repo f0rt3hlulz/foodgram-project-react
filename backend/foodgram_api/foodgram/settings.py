@@ -20,12 +20,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='0-(-x-=6(6j3ehw)_xv2t^8$%y4qolbbh0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = os.getenv('FOODGRAM_HOSTS', '*').split(',')
-
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    'FOODGRAM_TRUSTED_ORIGINS', 'http://*.localhost'
-).split(',')
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
