@@ -4,6 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 ENV_PATH = Path('../infra') / '.env'
+
 load_dotenv(dotenv_path=ENV_PATH)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -139,7 +140,6 @@ MEDIA_URL = '/media/'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
 
 AUTH_USER_MODEL = 'users.User'
 
