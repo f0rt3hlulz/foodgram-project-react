@@ -2,7 +2,7 @@ FROM python:3.7-slim
 
 RUN mkdir /app
 
-COPY requirements.txt /app
+COPY foodgram_api/requirements.txt /app
 
 RUN python -m pip install --upgrade pip
 
