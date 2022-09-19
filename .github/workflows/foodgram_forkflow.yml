@@ -104,7 +104,7 @@ jobs:
           script: |
             cd ~
             cd ./foodgram-project-react
-            sudo docker pull f0rt3hlulz/foogram:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
             sudo docker-compose stop
             sudo docker-compose rm web
             sudo docker-compose up -d
