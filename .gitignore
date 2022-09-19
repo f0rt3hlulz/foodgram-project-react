@@ -9,7 +9,7 @@ __pycache__/
 # migrations
 _migrations/*
 !_migrations/__init__.py
-
+/backend/tests
 
 # Distribution / packaging
 .Python
