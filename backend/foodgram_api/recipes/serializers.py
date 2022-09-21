@@ -50,10 +50,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         model = Recipe
 
     def add_ingredients(self, recipe, ingredients):
-        for ingr in ingredients:
+        for ingridient in ingredients:
             IngredientRecipe.objects.create(
-                ingredient_id=ingr.get('id'),
-                amount=ingr.get('amount'),
+                ingredient_id=ingridient.get('id'),
+                amount=ingridient.get('amount'),
                 recipe=recipe
             )
 

@@ -138,9 +138,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 AUTH_USER_MODEL = 'users.User'
 
-# CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
-
-
 # Rest framework
 
 REST_FRAMEWORK = {

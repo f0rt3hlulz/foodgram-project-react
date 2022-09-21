@@ -28,7 +28,7 @@ class Tag(models.Model):
         unique=True,
         validators=[
             validators.RegexValidator(
-                regex=r'^#[a-fA-F0-9]{6}$',
+                regex=r'^#[a-fA-F\d]{6}$',
                 message='Неверное значение HEX-кода'
             )
         ],
@@ -121,5 +121,8 @@ class IngredientRecipe(models.Model):
         verbose_name_plural = 'Ингредиенты в рецепте'
 
     def __str__(self):
-        return (f'{self.ingredient.name} ({self.ingredient.measurement_unit})'
-                f' - {self.amount}')
+        return (
+            f'{self.ingredient.name}'
+            f'({self.ingredient.measurement_unit})'
+            f' - {self.amount}'
+        )

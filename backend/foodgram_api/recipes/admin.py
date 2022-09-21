@@ -18,8 +18,10 @@ class IngredientRecipe(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image', 'cooking_time', 'author', 'ingrs', 'tgs',
-                    'favorites_count', 'shopping_cart_count')
+    list_display = (
+        'name', 'image', 'cooking_time', 'author', 'get_ingredients',
+        'get_tags', 'favorites_count', 'shopping_cart_count'
+    )
     inlines = (IngredientInline,)
     empty_value_display = EMPTY
     list_filter = ('author', 'tags')
@@ -27,15 +29,11 @@ class RecipeAdmin(admin.ModelAdmin):
         'name', 'author__username', 'tags__name', 'ingredients__name'
     )
 
-    def ingrs(self, obj):
-        return ', '.join(list([
-            list(i.values())[0] for i in obj.ingredients.values('name')
-        ]))
+    def get_ingredients(self, obj):
+        return obj.values_list('get_ingredients')
 
-    def tgs(self, obj):
-        return ', '.join(list([
-            list(i.values())[0] for i in obj.tags.values('name')
-        ]))
+    def get_tags(self, obj):
+        return obj.values_list('get_tags')
 
     def favorites_count(self, obj):
         return obj.favorites.count()

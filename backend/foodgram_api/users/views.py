@@ -9,23 +9,24 @@ from .models import User
 from .serializers import UserAuthSerializer, UserSerializer
 
 
-class CustomUserViewSet(UserViewSet):
+class UserViewSetForRequests(UserViewSet):
     queryset = User.objects.all()
     serializer_class = UserAuthSerializer
 
     @action(
-        methods=["post", "delete"],
+        methods=['post', 'delete'],
         detail=True,
         permission_classes=(IsAuthenticated,))
     def subscribe(self, request, id):
         follower = self.get_object()
         if request.user == follower:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return add_or_del_obj(id, request, request.user.followers,
-                              UserAuthSerializer)
+        return add_or_del_obj(
+            id, request, request.user.followers, UserAuthSerializer
+            )
 
     @action(
-        methods=["get"],
+        methods=['get'],
         permission_classes=(IsAuthenticated,),
         detail=False
     )
