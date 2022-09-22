@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 PAGINATION_SIZE = 6
 
+
 def add_or_del_obj(pk, request, param, data_for_validate):
     obj_bool = param.filter(pk=pk).exists()
     if request.method == 'DELETE' and obj_bool:

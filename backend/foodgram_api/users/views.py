@@ -23,7 +23,7 @@ class UserViewSetForRequests(UserViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return add_or_del_obj(
             id, request, request.user.followers, UserAuthSerializer
-            )
+        )
 
     @action(
         methods=['get'],
