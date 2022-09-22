@@ -1,5 +1,41 @@
 [![Django-app workflow](https://github.com/f0rt3hlulz/foodgram-project-react/actions/workflows/foodgram_forkflow.yml/badge.svg)](https://github.com/f0rt3hlulz/foodgram-project-react/actions/workflows/foodgram_forkflow.yml)
 
-# Work in progress
+# Описание.
 
-server located here - http://130.193.53.73/
+Проект «Продуктовый помощник». На этом сервисе пользователи могут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
+
+Стек: Python 3, Django 3, Django REST Framework, SQLite3, PostgreSQL, gunicorn, nginx, Яндекс.Облако (Ubuntu 22.04)
+
+# Как запустить проект:
+
+Клонировать репозиторий и перейти в него в командной строке:
+```
+git clone https://github.com/f0rt3hlulz/foodgram-project-react
+
+```
+```
+cd foodgram-project-react
+```
+Создайте файл .env командой touch .env. Шаблон наполнения env-файла:
+```
+DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
+DB_NAME=postgres # имя базы данных
+POSTGRES_USER=postgres # логин для подключения к базе данных
+POSTGRES_PASSWORD=postgres # пароль для подключения к БД (установите свой)
+DB_HOST=db # название сервиса (контейнера)
+DB_PORT=5432 # порт для подключения к БД
+```
+```
+Запустите docker-compose командой sudo docker-compose up -d
+```
+Создайте суперпользователя Django:
+```
+sudo docker-compose exec web python manage.py createsuperuser
+```
+Загрузите тестовые данные в базу данных командой: 
+```
+sudo docker -compose exec backend python manage.py loaddata dump.json
+```
+### Над проектом работали: 
+- Frontend - https://github.com/yandex-praktikum/foodgram-project-react
+- Backend - https://github.com/KaterinaSolovyeva
