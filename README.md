@@ -25,8 +25,9 @@ POSTGRES_PASSWORD=postgres # пароль для подключения к БД 
 DB_HOST=db # название сервиса (контейнера)
 DB_PORT=5432 # порт для подключения к БД
 ```
+Запустите docker-compose командой 
 ```
-Запустите docker-compose командой sudo docker-compose up -d
+sudo docker-compose up -d
 ```
 Создайте суперпользователя Django:
 ```
@@ -38,4 +39,4 @@ sudo docker -compose exec backend python manage.py loaddata dump.json
 ```
 ### Над проектом работали: 
 - Frontend - https://github.com/yandex-praktikum/foodgram-project-react
-- Backend - https://github.com/KaterinaSolovyeva
+- Backend - https://github.com/f0rt3hlulz
