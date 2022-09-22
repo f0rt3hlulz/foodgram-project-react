@@ -73,10 +73,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(methods=["get"], detail=False)
     def generate_shopping_cart_data(self, request):
-        recipes = (
-            request.user.shopping_cart.all()
-        )
-        return recipes
+        return request.user.shopping_cart.all()
 
     def generate_ingredients_content(self, get_ingredients):
         content = ['Список необходимых ингредиентов:\n']
