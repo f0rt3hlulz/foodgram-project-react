@@ -59,6 +59,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
             RecipeForUserSerializer
         )
 
+    @action(detail=False)
+    def download_shopping_cart(self, request):
+        user = request.user
+        filename = f'{user.username}_shopping_list.txt'
+        get_ingredients = self.generate_shopping_cart_data(request)
+        content = self.generate_ingredients_content(get_ingredients)
+        response = HttpResponse(
+            content, content_type='text/plain,charset=utf8'
+        )
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        return response
+
     @action(methods=["get"], detail=False)
     def generate_shopping_cart_data(self, request):
         recipes = (
@@ -71,19 +83,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         content += [
             f'{item.get("ingredient__name").capitalize()} '
             f'({item.get("ingredient__measurement_unit")}) - '
-            f'{item.get("sum_amount")}\n' 
+            f'{item.get("sum_amount")}\n'
             for item in list(get_ingredients)
         ]
         return content
-
-    @action(detail=False)
-    def download_shopping_cart(self, request):
-        user = request.user
-        filename = f'{user.username}_shopping_list.txt'
-        get_ingredients = self.generate_shopping_cart_data(request)
-        content = self.generate_ingredients_content(get_ingredients)
-        response = HttpResponse(
-            content, content_type='text/plain,charset=utf8'
-        )
-        response['Content-Disposition'] = f'attachment; filename={filename}'
-        return response

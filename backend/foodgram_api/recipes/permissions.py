@@ -13,8 +13,8 @@ class AuthPostAuthorChangesOrReadOnly(permissions.BasePermission):
             request.method in permissions.SAFE_METHODS
             or (
                 request.user.is_authenticated and (
-                    request.method == 'POST' 
+                    request.method == 'POST'
                     or obj.author == request.user
-                    )
+                )
             )
         )
