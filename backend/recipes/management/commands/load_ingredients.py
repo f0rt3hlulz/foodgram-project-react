@@ -4,7 +4,7 @@ import os
 from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
 
-path = 'data/ingredients.json'
+path = 'data'
 
 
 class Command(BaseCommand):
