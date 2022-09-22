@@ -9,7 +9,7 @@ EMPTY = '-пусто-'
 class UserAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserAdminForm, self).__init__(*args, **kwargs)
-        #self.fields['password'].widget = forms.PasswordInput()
+        # self.fields['password'].widget = forms.PasswordInput()
 
     class Meta:
         model = User
