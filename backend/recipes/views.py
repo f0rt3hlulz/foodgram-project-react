@@ -15,6 +15,8 @@ from .serializers import (
     )
 from .services import add_or_del_obj
 
+# flake8: noqa
+
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
