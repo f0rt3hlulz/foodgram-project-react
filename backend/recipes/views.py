@@ -4,13 +4,15 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
-from users.serializers import RecipeForUserSerializer
 
+from users.serializers import RecipeForUserSerializer
 from .filters import IngredientFilter, RecipeFilter
 from .models import Ingredient, Recipe, Tag
 from .permissions import AuthPostAuthorChangesOrReadOnly
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, TagSerializer)
+from .serializers import (
+    IngredientSerializer, RecipeReadSerializer,
+    RecipeWriteSerializer, TagSerializer
+)
 from .services import add_or_del_obj
 
 
