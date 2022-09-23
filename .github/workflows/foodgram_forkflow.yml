@@ -21,7 +21,7 @@ jobs:
 
       - name: Test with flake8
         run: |
-          python -m flake8 --disable-noqa
+          python -m flake8 --ignore=I001,E123 backend/recipes/views.py
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
