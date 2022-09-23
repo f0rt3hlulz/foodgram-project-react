@@ -21,7 +21,7 @@ jobs:
 
       - name: Test with flake8
         run: |
-          python -m flake8 --ignore=I001,E123 backend/recipes/views.py
+          python -m flake8 --ignore=I001,E123,I005 backend/recipes/views.py
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -86,8 +86,6 @@ jobs:
           source: "infra/nginx/default.conf"
           target: "/home/ftl/foodgram-project-react/nginx"
           strip_components: 2
-          script:
-            sudo nginx -s stop
           
       - name: Copy docker-compose.yaml via ssh
         uses: appleboy/scp-action@master
@@ -109,6 +107,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            sudo nginx -s stop
             cd ~
             cd ./foodgram-project-react
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
