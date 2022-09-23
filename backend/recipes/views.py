@@ -72,7 +72,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
-    
+
     @action(methods=["get"], detail=False)
     def generate_shopping_cart_data(self, request):
         return request.user.shopping_cart.all()
