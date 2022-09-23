@@ -11,7 +11,7 @@ class IngredientInline(admin.TabularInline):
 
 @admin.register(IngredientRecipe)
 class IngredientRecipe(admin.ModelAdmin):
-    list_display = ('recipe', 'recipes' 'ingredient', 'amount')
+    list_display = ('recipe', 'ingredient', 'amount')
     empty_value_display = EMPTY
     search_fields = ('ingredient__name',)
 
