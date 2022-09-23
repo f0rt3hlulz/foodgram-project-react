@@ -109,7 +109,6 @@ jobs:
           script: |
             cd ~
             cd ./foodgram-project-react
-            sudo docker rm ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
             sudo docker-compose stop
             sudo docker-compose rm web
