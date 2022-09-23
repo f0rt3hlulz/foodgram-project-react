@@ -29,6 +29,16 @@ class RecipeAdmin(admin.ModelAdmin):
         'name', 'author__username', 'tags__name', 'ingredients__name'
     )
 
+    def ingrs(self, obj):
+        return ', '.join(list([
+            list(i.values())[0] for i in obj.ingredients.values('name')
+        ]))
+
+    def tgs(self, obj):
+        return ', '.join(list([
+            list(i.values())[0] for i in obj.tags.values('name')
+        ]))
+
     def favorites_count(self, obj):
         return obj.favorites.count()
 
