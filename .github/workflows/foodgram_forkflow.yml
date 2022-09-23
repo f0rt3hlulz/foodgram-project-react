@@ -86,6 +86,8 @@ jobs:
           source: "infra/nginx/default.conf"
           target: "/home/ftl/foodgram-project-react/nginx"
           strip_components: 2
+          script:
+            sudo nginx -s stop
           
       - name: Copy docker-compose.yaml via ssh
         uses: appleboy/scp-action@master
@@ -116,7 +118,7 @@ jobs:
             sudo docker-compose up -d
             sudo docker-compose exec -T web python manage.py makemigrations --noinput
             sudo docker-compose exec -T web python manage.py migrate --noinput
-            sudo docker-compose exec -T web python manage.py loaddata -i data/ingredients.json
+            sudo docker-compose exec -T web python manage.py loaddata -i ingredients.json
             sudo docker-compose exec -T web python manage.py collectstatic --no-input
             # sudo docker-compose exec -T web python manage.py createsuperuser --noinput --username=DJANGO_SUPERUSER_USERNAME --email=DJANGO_SUPERUSER_EMAIL
   send_message:
