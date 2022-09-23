@@ -29,12 +29,12 @@ class RecipeAdmin(admin.ModelAdmin):
         'name', 'author__username', 'tags__name', 'ingredients__name'
     )
 
-    def ingrs(self, obj):
+    def get_ingredients(self, obj):
         return ', '.join(list([
             list(i.values())[0] for i in obj.ingredients.values('name')
         ]))
 
-    def tgs(self, obj):
+    def get_tags(self, obj):
         return ', '.join(list([
             list(i.values())[0] for i in obj.tags.values('name')
         ]))
