@@ -32,10 +32,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def get_ingredients(self, obj):
-        try:
-            return obj.values_list('name')
-        except:
-            return obj.ingredients.values_list()
+        return obj.ingridients.values.filter('name').all()
         # return list[obj.values_list('name')]
 
     def get_tags(self, obj):
