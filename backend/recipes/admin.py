@@ -19,9 +19,8 @@ class IngredientRecipe(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'image', 'cooking_time', 'author', 'ingridients',
-        'get_ingredients', 'get_tags', 'favorites_count',
-        'shopping_cart_count', 'tags'
+        'name', 'image', 'cooking_time', 'author', 'get_ingredients',
+        'get_tags', 'favorites_count', 'shopping_cart_count'
     )
     inlines = (IngredientInline,)
     empty_value_display = EMPTY
