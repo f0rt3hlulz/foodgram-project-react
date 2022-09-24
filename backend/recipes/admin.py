@@ -30,7 +30,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def get_ingredients(self, obj):
-        return list[obj.ingredients.values.values_list('name')]
+        return list[obj.ingredients.values_list('name')]
 
     def get_tags(self, obj):
         return obj.tags.value_list('name')
