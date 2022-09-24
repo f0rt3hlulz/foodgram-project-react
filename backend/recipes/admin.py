@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from symbol import except_clause
+
 from .models import Ingredient, IngredientRecipe, Recipe, Tag
 
 EMPTY = '-пусто-'
@@ -30,7 +32,11 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def get_ingredients(self, obj):
-        return list[obj.ingredients.values_list('name')]
+        try:
+            return obj.values_list('name')
+        except:
+            return obj.ingredients.values_list()
+        # return list[obj.values_list('name')]
 
     def get_tags(self, obj):
         return obj.tags.value_list('name')
