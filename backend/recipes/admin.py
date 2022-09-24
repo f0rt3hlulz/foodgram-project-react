@@ -29,10 +29,10 @@ class RecipeAdmin(admin.ModelAdmin):
         'name', 'author__username', 'tags__name', 'ingredients__name'
     )
 
-    def get_ingredients(self):
+    def get_ingredients(self, obj):
         return Recipe.ingridients.value_list('name')
 
-    def get_tags(self):
+    def get_tags(self, obj):
         return Recipe.tags.value_list('name')
 
     def favorites_count(self, obj):

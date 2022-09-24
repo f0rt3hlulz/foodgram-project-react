@@ -12,8 +12,8 @@ class Ingredient(models.Model):
     measurement_unit = models.CharField(max_length=20)
 
     class Meta:
-        verbose_name = 'Ингредиент'
-        verbose_name_plural = 'Ингредиенты'
+        verbose_name = 'Ингредиент', 'Ingridient'
+        verbose_name_plural = 'Ингредиенты', 'Ingridients'
         ordering = ('name',)
 
     def __str__(self):
