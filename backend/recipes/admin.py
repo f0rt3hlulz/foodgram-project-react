@@ -19,8 +19,9 @@ class IngredientRecipe(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'image', 'cooking_time', 'author', 'get_ingredients',
-        'get_tags', 'favorites_count', 'shopping_cart_count'
+        'name', 'image', 'cooking_time', 'author', 'ingridients',
+        'get_ingredients', 'get_tags', 'favorites_count',
+        'shopping_cart_count', 'tags'
     )
     inlines = (IngredientInline,)
     empty_value_display = EMPTY
@@ -30,10 +31,10 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def get_ingredients(self, obj):
-        return Recipe.ingridients.value_list('name')
+        return obj.ingridients.values.value_list('name')
 
     def get_tags(self, obj):
-        return Recipe.tags.value_list('name')
+        return obj.tags.value_list('name')
 
     def favorites_count(self, obj):
         return obj.favorites.count()
