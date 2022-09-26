@@ -1,18 +1,20 @@
+import csv
+
+from django.db.models import Sum
 from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
-
+from rest_framework.response import Response
 from users.serializers import RecipeForUserSerializer
+
 from .filters import IngredientFilter, RecipeFilter
-from .models import Ingredient, Recipe, Tag
+from .models import Ingredient, IngredientRecipe, Recipe, Tag
 from .permissions import AuthPostAuthorChangesOrReadOnly
-from .serializers import (
-    IngredientSerializer, RecipeReadSerializer,
-    RecipeWriteSerializer, TagSerializer
-)
+from .serializers import (IngredientSerializer, RecipeReadSerializer,
+                          RecipeWriteSerializer, TagSerializer)
 from .services import add_or_del_obj
 
 
@@ -61,28 +63,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
             RecipeForUserSerializer
         )
 
-    @action(detail=False)
+    @action(
+        methods=['get'],
+        detail=False,
+    )
     def download_shopping_cart(self, request):
-        user = request.user
-        filename = f'{user.username}_shopping_list.txt'
-        get_ingredients = self.generate_shopping_cart_data(request)
-        content = self.generate_ingredients_content(get_ingredients)
-        response = HttpResponse(
-            content, content_type='text/plain,charset=utf8'
-        )
-        response['Content-Disposition'] = f'attachment; filename={filename}'
+        user = self.request.user
+        if user.is_anonymous:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        ingredients = IngredientRecipe.objects.filter(
+            recipe__shopping_cart__user=request.user
+        ).values(
+            'ingredient__name', 'ingredient__measurement_unit'
+        ).annotate(ingredient_amount=Sum('amount')).values_list(
+            'ingredient__name', 'ingredient__measurement_unit',
+            'ingredient_amount')
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = ('attachment;'
+                                           'filename="Shoppingcart.csv"')
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+        for item in list(ingredients):
+            writer.writerow(item)
         return response
-
-    @action(methods=["get"], detail=False)
-    def generate_shopping_cart_data(self, request):
-        return request.user.shopping_cart.all()
-
-    def generate_ingredients_content(self, get_ingredients):
-        content = ['Список необходимых ингредиентов:\n']
-        content += [
-            f'{item.get("ingredient__name").capitalize()} '
-            f'({item.get("ingredient__measurement_unit")}) - '
-            f'{item.get("sum_amount")}\n'
-            for item in list(get_ingredients)
-        ]
-        return content
