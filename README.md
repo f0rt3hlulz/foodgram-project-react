@@ -229,6 +229,3 @@ POST-запрос: /api/auth/token/login/
 ### <br /> Автор проекта:
 - Frontend - https://github.com/yandex-praktikum/foodgram-project-react
 - Backend - https://github.com/f0rt3hlulz
-
-ftl_admin@mail.ru
-ftl_admin_123
