@@ -32,11 +32,13 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def get_ingredients(self, obj):
+        return obj.ingredients.values_list('name', flat=True)
         return ', '.join(list([
             list(i.values())[0] for i in obj.ingredients.values('name')
         ]))
 
     def get_tags(self, obj):
+        return obj.tags.values_list('name', flat=True)
         return ', '.join(list([
             list(i.values())[0] for i in obj.tags.values('name')
         ]))
