@@ -30,12 +30,11 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = (
         'name', 'author__username', 'tags__name', 'ingredients__name'
     )
-
     def get_ingredients(self, obj):
-        return obj.ingredients.values_list('name', flat=True)
+        return ', '.join(list(obj.ingredients.values_list('name', flat=True)))
         
     def get_tags(self, obj):
-        return ', '.join(list(obj.ingredients.values_list('name', flat=True)))
+        return obj.tags.values_list('name', flat=True)
 
     def favorites_count(self, obj):
         return obj.favorites.count()

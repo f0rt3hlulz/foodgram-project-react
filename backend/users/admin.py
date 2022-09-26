@@ -1,7 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.forms import (ReadOnlyPasswordHashField,
-                                       UserCreationForm)
 
 from .models import User
 
@@ -10,7 +8,6 @@ EMPTY = '-пусто-'
 
 class UserAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        
         super(UserAdminForm, self).__init__(*args, **kwargs)
         self.fields['password'].widget = forms.PasswordInput()
     

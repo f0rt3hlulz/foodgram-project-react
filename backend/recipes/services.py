@@ -21,9 +21,10 @@ def add_or_del_obj(pk, request, param, data_for_validate):
 def create_shopping_list(ingredients):
     text_list = ['Список необходимых ингредиентов:\n']
     text_list += [
-        f'{i.get("ingredient__name").capitalize()} '
-        f'({i.get("ingredient__measurement_unit")}) - '
-        f'{i.get("sum_amount")}\n' for i in list(ingredients)
+        f'{ingredient.get("ingredient__name").capitalize()} '
+        f'({ingredient.get("ingredient__measurement_unit")}) - '
+        f'{ingredient.get("sum_amount")}\n' 
+        for ingredient in list(ingredients)
     ]
     text_list += ['\n\nДанные проекта Foodgram']
     return text_list

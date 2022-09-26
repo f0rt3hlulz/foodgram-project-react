@@ -10,9 +10,11 @@ from users.serializers import RecipeForUserSerializer
 from .filters import IngredientFilter, RecipeFilter
 from .models import Ingredient, Recipe, Tag
 from .permissions import AuthPostAuthorChangesOrReadOnly
-from .serializers import (IngredientRecipe, IngredientSerializer,
-                          RecipeReadSerializer, RecipeWriteSerializer,
-                          TagSerializer)
+from .serializers import (
+    IngredientRecipe, IngredientSerializer,
+    RecipeReadSerializer, RecipeWriteSerializer,
+    TagSerializer
+)
 from .services import add_or_del_obj, create_shopping_list
 
 
@@ -56,8 +58,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post", "delete"], detail=True)
     def shopping_cart(self, request, pk):
-        return add_or_del_obj(pk, request, request.user.shopping_cart,
-                              RecipeForUserSerializer)
+        return add_or_del_obj(
+            pk, request, request.user.shopping_cart,
+            RecipeForUserSerializer
+        )
 
     @action(methods=["get"], detail=False)
     def download_shopping_cart(self, request):
