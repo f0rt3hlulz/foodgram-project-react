@@ -19,14 +19,7 @@ class UserAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class CustomUserCreationForm(UserCreationForm):
-    password = ReadOnlyPasswordHashField(
-        label = ("Password"),
-        help_text = (
-            "Raw passwords are not stored, so there is no way to see this "
-            "user's password, but you can change the password using "
-            "<a href=\"{change-password}\">this form</a>."
-        ),
-    )
+    password = forms.PasswordInput()
 
     class Meta:
         model = UserCreationForm.Meta.model
