@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+django.contrib.auth.admin.UserAdmin
 
 from .models import User
 
@@ -19,7 +19,7 @@ class UserAdminForm(forms.ModelForm):
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(admin.UserAdmin):
     list_display = (
         'username', 'email', 'first_name', 'last_name',
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
@@ -31,5 +31,3 @@ class UserAdmin(admin.ModelAdmin):
 
     def followers_count(self, obj):
         return obj.followers.count()
-
-admin.site.register(User, UserAdmin)
