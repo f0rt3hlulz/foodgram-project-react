@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.ingredients.values_list('name', flat=True)
         
     def get_tags(self, obj):
-        return obj.tags.values_list('name', flat=True)
+        return ', '.join(list(obj.ingredients.values_list('name', flat=True)))
 
     def favorites_count(self, obj):
         return obj.favorites.count()
