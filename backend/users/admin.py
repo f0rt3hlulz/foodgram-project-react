@@ -26,6 +26,8 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('date_joined',)
     empty_value_display = EMPTY
     form = UserAdminForm
+    fields = ('username', 'email', 'first_name', 'last_name',
+        'is_superuser', 'is_staff', 'followers_count',)
     search_fields = ('email', 'username')
 
     def followers_count(self, obj):
