@@ -23,6 +23,10 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'email', 'first_name', 'last_name',
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
     )
+    list_editable = (
+        'username',
+        'password'
+    )
     empty_value_display = EMPTY
     form = UserAdminForm
     search_fields = ('email', 'username')
