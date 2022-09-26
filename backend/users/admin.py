@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import User
 
@@ -8,6 +9,7 @@ EMPTY = '-пусто-'
 
 class UserAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        
         super(UserAdminForm, self).__init__(*args, **kwargs)
         self.fields['password'].widget = forms.PasswordInput()
 
@@ -22,7 +24,6 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'email', 'first_name', 'last_name',
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
     )
-    list_display['password'].widget = forms.PasswordInput()
     empty_value_display = EMPTY
     form = UserAdminForm
     search_fields = ('email', 'username')
@@ -30,3 +31,5 @@ class UserAdmin(admin.ModelAdmin):
 
     def followers_count(self, obj):
         return obj.followers.count()
+
+admin.site.register(User, UserAdmin)
