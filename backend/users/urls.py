@@ -12,9 +12,4 @@ router_v1.register('users', UserViewSetForRequests)
 urlpatterns = [
     path('', include(router_v1.urls)),
     path('auth/', include('djoser.urls.authtoken')),
-    path(
-        r'admin_password_reset/',
-        PasswordResetView.as_view(),
-        name='admin_password_reset'
-    )
 ]
