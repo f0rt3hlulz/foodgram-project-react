@@ -18,7 +18,7 @@ class UserAdminForm(forms.ModelForm):
 
 
 @admin.register(User)
-class UserAdmin(admin.UserAdmin):
+class UserAdmin(admin.ModelAdmin):
     list_display = (
         'username', 'email', 'first_name', 'last_name',
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
