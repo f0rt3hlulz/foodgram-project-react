@@ -54,37 +54,37 @@ class RecipeViewSet(viewsets.ModelViewSet):
             RecipeForUserSerializer
         )
 
-    @action(methods=["post", "delete"], detail=True) 
-    def shopping_cart(self, request, pk): 
-        return add_or_del_obj(pk, request, request.user.shopping_cart, 
-                              RecipeForUserSerializer) 
-
-    @action(methods=["get"])
+    @action(methods=["post", "delete"], detail=True)
+    def shopping_cart(self, request, pk):
+        return add_or_del_obj(pk, request, request.user.shopping_cart,
+                              RecipeForUserSerializer)
+    
+    @action(methods=["get"], detail=False)
     def generate_shoping_cart(self, request):
-        user = request.user 
-        recipes_in_cart = user.shopping_cart.all() 
-        ingredients = IngredientRecipe.objects.filter( 
-            recipe_in=recipes_in_cart 
-        ).values( 
-            'ingredient__name', 'ingredient__measurement_unit' 
-        ).annotate(sum_amount=Sum('amount')) 
-        text_list = ['Список необходимых ингредиентов:\n'] 
-        text_list += [ 
-            f'{ingredient.get("ingredient__name").capitalize()} ' 
-            f'({ingredient.get("ingredient__measurement_unit")}) - ' 
-            f'{ingredient.get("sum_amount")}\n' 
+        user = request.user
+        recipes_in_cart = user.shopping_cart.all()
+        ingredients = IngredientRecipe.objects.filter(
+            recipe_in=recipes_in_cart
+        ).values(
+            'ingredient__name', 'ingredient__measurement_unit'
+        ).annotate(sum_amount=Sum('amount'))
+        text_list = ['Список необходимых ингредиентов:\n']
+        text_list += [
+            f'{ingredient.get("ingredient__name").capitalize()} '
+            f'({ingredient.get("ingredient__measurement_unit")}) - '
+            f'{ingredient.get("sum_amount")}\n'
             for ingredient in list(ingredients)
-        ] 
+        ]
         text_list += ['\n\nДанные проекта Foodgram']
         return text_list
 
-    @action(methods=["get"]) 
+    @action(methods=["get"])
     def download_shopping_cart(self, request):
+        text_list = generate_shoping_cart(request)
         user = request.user
         filename = f'{user.username}_shopping_list.txt'
-        text_list = generate_shoping_cart(request)
-        response = HttpResponse(text_list, content_type='text/plain') 
-        response['Content-Disposition'] = ( 
-            f'attachment; filename="{filename}"' 
-        ) 
-        return response 
+        response = HttpResponse(text_list, content_type='text/plain')
+        response['Content-Disposition'] = (
+            f'attachment; filename="{filename}"'
+        )
+        return response
