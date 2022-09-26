@@ -22,9 +22,11 @@ class UserAdmin(admin.ModelAdmin):
         'username', 'email', 'first_name', 'last_name',
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
     )
+    list_display['password'].widget = forms.PasswordInput()
     empty_value_display = EMPTY
     form = UserAdminForm
     search_fields = ('email', 'username')
+    readonly_fields = ('date_started')
 
     def followers_count(self, obj):
         return obj.followers.count()
