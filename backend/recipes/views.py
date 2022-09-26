@@ -72,11 +72,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if user.is_anonymous:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         ingredients = IngredientRecipe.objects.filter(
-            recipe__shopping_cart__user=request.user
+            recipe_shopping_cart_user=request.user
         ).values(
-            'ingredient__name', 'ingredient__measurement_unit'
+            'ingredient_name', 'ingredient_measurement_unit'
         ).annotate(ingredient_amount=Sum('amount')).values_list(
-            'ingredient__name', 'ingredient__measurement_unit',
+            'ingredient_name', 'ingredient_measurement_unit',
             'ingredient_amount')
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = ('attachment;'
