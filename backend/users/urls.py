@@ -1,6 +1,6 @@
-from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
+from django.contrib.auth.views import PasswordResetView
 
 from .views import UserViewSetForRequests
 
@@ -13,8 +13,8 @@ urlpatterns = [
     path('', include(router_v1.urls)),
     path('auth/', include('djoser.urls.authtoken')),
     path(
-        'admin/password_reset/',
-        auth_views.PasswordResetView.as_view(),
-        name='admin_password_reset',
-    ),
+        r'admin_password_reset/',
+        PasswordResetView.as_view(),
+        name='admin_password_reset'
+    )
 ]
