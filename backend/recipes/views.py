@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -7,10 +8,11 @@ from rest_framework.permissions import AllowAny
 from users.serializers import RecipeForUserSerializer
 
 from .filters import IngredientFilter, RecipeFilter
-from .models import (Ingredient, Recipe, Tag)
+from .models import Ingredient, Recipe, Tag
 from .permissions import AuthPostAuthorChangesOrReadOnly
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, TagSerializer)
+from .serializers import (IngredientRecipe, IngredientSerializer,
+                          RecipeReadSerializer, RecipeWriteSerializer,
+                          TagSerializer)
 from .services import add_or_del_obj
 
 
@@ -52,37 +54,37 @@ class RecipeViewSet(viewsets.ModelViewSet):
             RecipeForUserSerializer
         )
 
-    @action(methods=["post", "delete"], detail=True)
-    def shopping_cart(self, request, pk):
-        return add_or_del_obj(
-            pk, request, request.user.shopping_cart,
-            RecipeForUserSerializer
-        )
+    @action(methods=["post", "delete"], detail=True) 
+    def shopping_cart(self, request, pk): 
+        return add_or_del_obj(pk, request, request.user.shopping_cart, 
+                              RecipeForUserSerializer) 
 
-    @action(detail=False)
+    @action(methods=["get"])
+    def generate_shoping_cart(self, request):
+        user = request.user 
+        recipes_in_cart = user.shopping_cart.all() 
+        ingredients = IngredientRecipe.objects.filter( 
+            recipe_in=recipes_in_cart 
+        ).values( 
+            'ingredient__name', 'ingredient__measurement_unit' 
+        ).annotate(sum_amount=Sum('amount')) 
+        text_list = ['Список необходимых ингредиентов:\n'] 
+        text_list += [ 
+            f'{ingredient.get("ingredient__name").capitalize()} ' 
+            f'({ingredient.get("ingredient__measurement_unit")}) - ' 
+            f'{ingredient.get("sum_amount")}\n' 
+            for ingredient in list(ingredients)
+        ] 
+        text_list += ['\n\nДанные проекта Foodgram']
+        return text_list
+
+    @action(methods=["get"]) 
     def download_shopping_cart(self, request):
-        shopping_cart = request.user.purchases.all()
-        purchase_list = {}
-        for purchase in shopping_cart:
-            ingredients = purchase.recipe.ingredientrecipe_set.all()
-            for ingredient in ingredients:
-                name = ingredient.ingredient.name
-                amount = ingredient.amount
-                unit = ingredient.ingredient.measurement_unit
-                if name not in purchase_list:
-                    purchase_list[name] = {
-                        'amount': amount,
-                        'unit': unit
-                    }
-                else:
-                    purchase_list[name]['amount'] = (purchase_list[name]
-                                                     ['amount'] + amount)
-        wishlist = []
-        for item in purchase_list:
-            wishlist.append(f'{item} ({purchase_list[item]["unit"]}) — '
-                            f'{purchase_list[item]["amount"]} \n')
-        wishlist.append('')
-        wishlist.append('Приятных покупок!')
-        response = HttpResponse(wishlist, 'Content-Type: application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="wishlist.pdf"'
-        return response
+        user = request.user
+        filename = f'{user.username}_shopping_list.txt'
+        text_list = generate_shoping_cart(request)
+        response = HttpResponse(text_list, content_type='text/plain') 
+        response['Content-Disposition'] = ( 
+            f'attachment; filename="{filename}"' 
+        ) 
+        return response 
