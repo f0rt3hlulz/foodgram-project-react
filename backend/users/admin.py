@@ -18,14 +18,6 @@ class UserAdminForm(forms.ModelForm):
         model = User
         fields = '__all__'
 
-class CustomUserCreationForm(UserCreationForm):
-    password = forms.PasswordInput()
-
-    class Meta:
-        model = UserCreationForm.Meta.model
-        fields = ('__all__')
-        field_classes = UserCreationForm.Meta.field_classes
-
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -34,7 +26,7 @@ class UserAdmin(admin.ModelAdmin):
         'is_superuser', 'is_staff', 'date_joined', 'followers_count',
     )
     empty_value_display = EMPTY
-    form = CustomUserCreationForm
+    form = UserAdminForm
     search_fields = ('email', 'username')
     readonly_fields = ('date_joined', 'last_login')
 
