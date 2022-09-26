@@ -103,9 +103,3 @@ class RecipeReadSerializer(RecipeWriteSerializer):
         if user.is_authenticated:
             return user.shopping_cart.filter(pk=obj.pk).exists()
         return False
-
-
-class ShoppingCartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time', )

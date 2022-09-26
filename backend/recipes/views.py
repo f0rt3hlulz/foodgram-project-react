@@ -92,21 +92,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=False,
     )
     def download_shopping_cart(self, request):
-        user = self.request.user
-        if user.is_anonymous:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        ingredients = IngredientRecipe.objects.filter(
-            recipe_shopping_cart_user=request.user
-        ).values(
-            'ingredient_name', 'ingredient_measurement_unit'
-        ).annotate(ingredient_amount=Sum('amount')).values_list(
-            'ingredient_name', 'ingredient_measurement_unit',
-            'ingredient_amount')
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = ('attachment;'
-                                           'filename="Shoppingcart.csv"')
-        response.write(u'\ufeff'.encode('utf8'))
-        writer = csv.writer(response)
-        for item in list(ingredients):
-            writer.writerow(item)
+        shopping_cart = request.user.purchases.all()
+        purchase_list = {}
+        for purchase in shopping_cart:
+            ingredients = purchase.recipe.ingredientrecipe_set.all()
+            for ingredient in ingredients:
+                name = ingredient.ingredient.name
+                amount = ingredient.amount
+                unit = ingredient.ingredient.measurement_unit
+                if name not in purchase_list:
+                    purchase_list[name] = {
+                        'amount': amount,
+                        'unit': unit
+                    }
+                else:
+                    purchase_list[name]['amount'] = (purchase_list[name]
+                                                     ['amount'] + amount)
+        wishlist = []
+        for item in purchase_list:
+            wishlist.append(f'{item} ({purchase_list[item]["unit"]}) — '
+                            f'{purchase_list[item]["amount"]} \n')
+        wishlist.append('')
+        wishlist.append('Приятных покупок!')
+        response = HttpResponse(wishlist, 'Content-Type: application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="wishlist.pdf"'
         return response
