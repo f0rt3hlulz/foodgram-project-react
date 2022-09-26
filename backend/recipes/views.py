@@ -1,6 +1,3 @@
-import csv
-
-from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,12 +9,10 @@ from rest_framework.response import Response
 from users.serializers import RecipeForUserSerializer
 
 from .filters import IngredientFilter, RecipeFilter
-from .models import (Ingredient, IngredientRecipe, Recipe,
-                     Tag, ShoppingCart)
+from .models import (Ingredient, Recipe, Tag)
 from .permissions import AuthPostAuthorChangesOrReadOnly
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, TagSerializer,
-                          ShoppingCartSerializer)
+                          RecipeWriteSerializer, TagSerializer)
 from .services import add_or_del_obj
 
 
@@ -60,37 +55,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @action(methods=["post", "delete"], detail=True)
-    def shopping_cart(self, request, pk=None):
-        user = self.request.user
-        recipe = get_object_or_404(Recipe, pk=pk)
-        in_shopping_cart = ShoppingCart.objects.filter(
-            user=user,
-            recipe=recipe
+    def shopping_cart(self, request, pk):
+        return add_or_del_obj(
+            pk, request, request.user.shopping_cart,
+            RecipeForUserSerializer
         )
-        if user.is_anonymous:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if request.method == 'GET':
-            if not in_shopping_cart:
-                shopping_cart = ShoppingCart.objects.create(
-                    user=user,
-                    recipe=recipe
-                )
-                serializer = ShoppingCartSerializer(shopping_cart.recipe)
-                return Response(
-                    data=serializer.data,
-                    status=status.HTTP_201_CREATED
-                )
-        elif request.method == 'DELETE':
-            if not in_shopping_cart:
-                data = {'errors': 'Такой рецепта нет в списке покупок.'}
-                return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-            in_shopping_cart.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(
-        methods=['get'],
-        detail=False,
-    )
+    @action(detail=False)
     def download_shopping_cart(self, request):
         shopping_cart = request.user.purchases.all()
         purchase_list = {}
