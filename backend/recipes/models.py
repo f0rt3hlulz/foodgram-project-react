@@ -127,3 +127,23 @@ class IngredientRecipe(models.Model):
             f'({self.ingredient.measurement_unit})'
             f' - {self.amount}'
         )
+
+
+class ShoppingCart(models.Model):
+    """Модель списка покупок пользователя."""
+    user = models.ForeignKey(
+        User,
+        verbose_name='Пользователь',
+        on_delete=models.CASCADE,
+        related_name='shopping_cart',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        verbose_name='Рецепт',
+        on_delete=models.CASCADE,
+        related_name='shopping_cart',
+    )
+
+    class Meta:
+        verbose_name = 'Покупка'
+        verbose_name_plural = 'Покупки'
