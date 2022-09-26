@@ -19,7 +19,14 @@ class UserAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class CustomUserCreationForm(UserCreationForm):
-    password = ReadOnlyPasswordHashField()
+    password = ReadOnlyPasswordHashField(
+        label = ("Password"),
+        help_text = (
+            "Raw passwords are not stored, so there is no way to see this "
+            "user's password, but you can change the password using "
+            "<a href=\"{change-password}\">this form</a>."
+        ),
+    )
 
     class Meta:
         model = UserCreationForm.Meta.model
@@ -40,12 +47,4 @@ class UserAdmin(admin.ModelAdmin):
 
     def followers_count(self, obj):
         return obj.followers.count()
-
-    def save_model(self, request, obj, form, change):
-        if obj.pk:
-            if 'pbkdf2_sha256$' not in obj.password:
-                obj.set_password(obj.password)
-            obj.is_staff = True if obj.role == 'admin' else False
-            obj.is_superuser = True if obj.role == 'admin' else False
-        obj.save()
    
