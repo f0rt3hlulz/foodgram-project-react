@@ -13,7 +13,7 @@ from .permissions import AuthPostAuthorChangesOrReadOnly
 from .serializers import (IngredientRecipe, IngredientSerializer,
                           RecipeReadSerializer, RecipeWriteSerializer,
                           TagSerializer)
-from .services import add_or_del_obj
+from .services import add_or_del_obj, create_shopping_list
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -58,31 +58,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def shopping_cart(self, request, pk):
         return add_or_del_obj(pk, request, request.user.shopping_cart,
                               RecipeForUserSerializer)
-    
+
     @action(methods=["get"], detail=False)
-    def generate_shoping_cart(self, request):
+    def download_shopping_cart(self, request):
         user = request.user
+        filename = f'{user.username}_shopping_list.txt'
         recipes_in_cart = user.shopping_cart.all()
         ingredients = IngredientRecipe.objects.filter(
-            recipe_in=recipes_in_cart
+            recipe__in=recipes_in_cart
         ).values(
             'ingredient__name', 'ingredient__measurement_unit'
         ).annotate(sum_amount=Sum('amount'))
-        text_list = ['Список необходимых ингредиентов:\n']
-        text_list += [
-            f'{ingredient.get("ingredient__name").capitalize()} '
-            f'({ingredient.get("ingredient__measurement_unit")}) - '
-            f'{ingredient.get("sum_amount")}\n'
-            for ingredient in list(ingredients)
-        ]
-        text_list += ['\n\nДанные проекта Foodgram']
-        return text_list
-
-    @action(methods=["get"])
-    def download_shopping_cart(self, request):
-        text_list = generate_shoping_cart(request)
-        user = request.user
-        filename = f'{user.username}_shopping_list.txt'
+        text_list = create_shopping_list(ingredients)
         response = HttpResponse(text_list, content_type='text/plain')
         response['Content-Disposition'] = (
             f'attachment; filename="{filename}"'
