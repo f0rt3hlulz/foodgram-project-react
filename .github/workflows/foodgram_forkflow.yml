@@ -97,7 +97,7 @@ jobs:
           strip_components: 1
 
       - name: executing remote ssh commands to deploy
-        uses: applyeboy/ssh-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_2 }}
           username: ${{ secrets.USER_2 }}
