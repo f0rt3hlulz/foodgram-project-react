@@ -73,7 +73,7 @@ jobs:
       - name: Copy default.conf via ssh
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST_2 }}
+          host: ${{ secrets.HOST_2ND }}
           username: ${{ secrets.USER_2 }}
           # key: ${{ secrets.SSH_KEY }}
           # passphrase: ${{ secrets.PASSPHRASE }}
@@ -86,7 +86,7 @@ jobs:
       - name: Copy docker-compose.yaml via ssh
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST_2 }}
+          host: ${{ secrets.HOST_2ND }}
           username: ${{ secrets.USER_2 }}
           # key: ${{ secrets.SSH_KEY }}
           password: ${{ secrets.SSH_PASSWORD }}
@@ -99,7 +99,7 @@ jobs:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_2 }}
+          host: ${{ secrets.HOST_2ND }}
           username: ${{ secrets.USER_2 }}
           password: ${{ secrets.SSH_PASSWORD }}
           # key: ${{ secrets.SSH_KEY }}
