@@ -21,9 +21,9 @@ from .services import add_or_del_obj, create_shopping_list
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (SearchFilter, DjangoFilterBackend)
-    search_fields = ('^name',)
+    # permission_classes = (AllowAny,)
+    # filter_backends = (SearchFilter, DjangoFilterBackend)
+    # search_fields = ('^name',)
     filterset_class = IngredientFilter
     pagination_class = None
 
@@ -31,7 +31,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (AllowAny,)
     pagination_class = None
 
 
