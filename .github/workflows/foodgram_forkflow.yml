@@ -48,7 +48,7 @@ jobs:
   deploy:
       runs-on: ubuntu-latest
       needs: build_and_push_to_docker_hub
-      if: github.ref == 'refs/heads/master/develop'
+      if: github.ref == 'refs/heads/master'
       steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           # password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.PORT }} 
+          port: ${{ secrets.PORT }}
           source: "infra/nginx/default.conf"
           target: "/home/ftl/foodgram-project-react/nginx"
           strip_components: 2
